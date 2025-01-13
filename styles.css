@@ -1,0 +1,39 @@
+body {
+    background-color: #f0f8ff;
+    font-family: Arial, sans-serif;
+}
+
+.weather-card {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+}
+
+.favorites {
+    margin-top: 20px;
+}
+
+.favorite-btn {
+    cursor: pointer;
+    color: #0e0202;
+    text-decoration: none;
+    background-color: rgb(30, 198, 204);
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mt-4 {
+    color: green;
+}
+
+.form-check-label {
+    text-decoration: underline;
+    color: red;
+}
