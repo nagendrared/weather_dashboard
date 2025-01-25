@@ -8,15 +8,18 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="header1">Weather Dashboard</div>
     <div class="container text-center">
-        <h1 class="mt-4">Weather Dashboard</h1>
         <div class="input-group my-3">
             <input type="text" id="city-input" class="form-control" placeholder="Enter city name">
             <button class="btn btn-primary" onclick="fetchWeatherByCity()">Search</button>
         </div>
-        <button class="btn btn-secondary mb-3" onclick="fetchWeatherByGeolocation()">Use My Location</button>
+        <button class="btn2 btn-secondary mb-3" onclick="fetchWeatherByGeolocation()">Use My Location</button>
+        <div class="details d-none" id="current-weather">
+            <h3>Current Weather details</h3>
+        </div>
 
-        <div class="form-check form-switch mb-3">
+        <div class="form-check form-switch mb-3 d-none" id="unit-toggle-container">
             <input class="form-check-input" type="checkbox" id="unit-toggle" onchange="toggleUnits()">
             <label class="form-check-label" for="unit-toggle">Display in Fahrenheit</label>
         </div>
@@ -31,15 +34,82 @@
             <button class="favorite-btn" onclick="saveToFavorites()">Add to Favorites</button>
         </div>
 
-        <h3 class="mt-4">5-Day Forecast</h3>
+        <h3 class="header2 d-none" id="forecast-header">5-Day Forecast</h3>
         <div id="forecast" class="cards-container"></div>
-
-        <div class="favorites">
-            <h4>Favorites</h4>
+        
+            <div class="header3 d-none" id="favorites-container">
+            <h4 id="favorites">Favorites</h4>
             <ul id="favorites-list"></ul>
-        </div>
+        </div>        
     </div>
+    <footer class="footer d-none" id="footer">
+        <p>&copy; 2025 Keshavareddy Nagendra Reddy. All rights reserved.</p>
+    </footer> 
 
     <script src="script.js"></script>
+    <script>
+        // Function to display hidden elements after a city is searched
+        function showWeatherDetails() {
+            document.getElementById('current-weather').classList.remove('d-none');
+            document.getElementById('unit-toggle-container').classList.remove('d-none');
+            document.getElementById('forecast-header').classList.remove('d-none');
+            document.getElementById('favorites-container').classList.remove('d-none');
+            document.getElementById('footer').classList.remove('d-none');
+        }
+
+        // Function to manage favorites visibility
+        function updateFavoritesList() {
+            const list = document.getElementById('favorites-list');
+            list.innerHTML = '';
+            favorites.forEach(city => {
+                const li = document.createElement('li');
+                li.textContent = city;
+                li.onclick = () => fetchWeather(city);
+                list.appendChild(li);
+            });
+            if (favorites.length > 0) {
+                document.getElementById('favorites-container').classList.remove('d-none');
+            } else {
+                document.getElementById('favorites-container').classList.add('d-none');
+            }
+        }
+
+        // Function to fetch forecast data and show forecast header
+        function fetchForecast(lat, lon) {
+            const units = isFahrenheit ? 'imperial' : 'metric';
+            const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${units}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const forecastEl = document.getElementById('forecast');
+                    forecastEl.innerHTML = '';
+                    const dailyForecasts = data.list.filter((_, index) => index % 8 === 0);
+                    dailyForecasts.forEach(day => {
+                        const forecastCard = document.createElement('div');
+                        forecastCard.classList.add('col-md-2', 'weather-card');
+                        forecastCard.innerHTML = `
+                            <h5>${new Date(day.dt * 1000).toLocaleDateString()}</h5>
+                            <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="Weather icon">
+                            <p>High: ${day.main.temp_max}°${isFahrenheit ? 'F' : 'C'}</p>
+                            <p>Low: ${day.main.temp_min}°${isFahrenheit ? 'F' : 'C'}</p>
+                        `;
+                        forecastEl.appendChild(forecastCard);
+                    });
+                    document.getElementById('forecast-header').classList.remove('d-none'); // Show forecast header
+                })
+                .catch(err => alert(err.message));
+        }
+
+        // Ensure weather data fetch triggers visibility
+        function fetchWeatherByCity() {
+            const city = document.getElementById('city-input').value;
+            if (!city) return alert('Please enter a city name');
+            fetchWeather(city);
+            showWeatherDetails(); // Show elements once city is searched
+        }
+
+        // Initialize favorites visibility on page load
+        updateFavoritesList();
+    </script>
 </body>
 </html>
