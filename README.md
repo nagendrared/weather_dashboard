@@ -69,8 +69,13 @@ You can register at openweathermap.org to get your own free API key.
 
 🙌 Contributing
 Pull requests are welcome! Please open an issue first to discuss what you’d like to change.
-📬 Contact Nagendra Reddy Keshavareddy
-📧 https://www.linkedin.com/in/keshavareddy-nagendra-reddy-672127256/
-💻 https://github.com/nagendrared
+
+
+## 📬 Contact
+
+**Nagendra Reddy Keshavareddy**
+
+- 📧 [LinkedIn](https://www.linkedin.com/in/keshavareddy-nagendra-reddy-672127256/)
+- 💻 [GitHub](https://github.com/nagendrared)
 
 
